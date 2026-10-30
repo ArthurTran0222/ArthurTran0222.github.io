@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { withBase } from '../../utils/urls';
+import { getPublishedPosts, slugify } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts');
+  const publishedPosts = getPublishedPosts(allPosts);
+
+  // Thu thập tất cả các tags
+  const tagMap = new Map<string, { originalTag: string; posts: typeof publishedPosts }>();
+
+  for (const post of publishedPosts) {
+    for (const tag of post.data.tags || []) {
+      const normalized = slugify(tag);
+      if (!tagMap.has(normalized)) {
+        tagMap.set(normalized, { originalTag: tag, posts: [] });
+      }
+      tagMap.get(normalized)!.posts.push(post);
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([slugTag, { originalTag, posts }]) => ({
+    params: { tag: slugTag },
+    props: { originalTag, posts },
+  }));
+}
+
+const { originalTag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`Chủ đề: #${originalTag}`}
+  description={`Danh sách các bút ký giang hồ thuộc chủ đề #${originalTag}.`}
+>
+  <div class="tag-page">
+    <div class="container">
+      <header class="page-header reveal-on-scroll">
+        <a href={withBase('/posts/')} class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Trở về Toàn bộ Bút ký</span>
+        </a>
+
+        <div class="tag-header-title">
+          <span class="seal-mark" aria-hidden="true">標</span>
+          <h1 class="page-title">Chủ đề: #{originalTag}</h1>
+        </div>
+        <p class="page-lead">
+          Tìm thấy <strong>{posts.length}</strong> bài viết đúc kết về đề tài này.
+        </p>
+      </header>
+
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-gold-400);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-paper-50);
+    transform: translateX(-3px);
+  }
+
+  .tag-header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    margin: 0;
+    color: var(--color-paper-50);
+  }
+
+  .page-lead {
+    font-size: 1.15rem;
+    color: var(--color-mist-300);
+    margin: 0 0 3rem 0;
+  }
+
+  .page-lead strong {
+    color: var(--color-gold-300);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 640px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

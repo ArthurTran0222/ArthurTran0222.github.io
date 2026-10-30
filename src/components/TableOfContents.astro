@@ -1,0 +1,134 @@
+---
+import type { TocItem } from '../utils/content';
+
+interface Props {
+  headings: TocItem[];
+}
+
+const { headings } = Astro.props;
+---
+
+{headings.length > 0 && (
+  <nav class="toc-container" aria-label="Mục lục bài viết">
+    <div class="toc-header">
+      <span class="toc-seal" aria-hidden="true">目</span>
+      <h3 class="toc-title">Mục Lục Chương Hồi</h3>
+    </div>
+
+    <ul class="toc-list">
+      {headings.map((item) => (
+        <li class:list={['toc-item', `toc-depth-${item.depth}`]}>
+          <a href={`#${item.id}`} class="toc-link">
+            {item.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .toc-container {
+    background: rgba(24, 35, 31, 0.6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(181, 154, 99, 0.2);
+  }
+
+  .toc-seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--color-gold-400);
+    color: var(--color-ink-950);
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 2px;
+  }
+
+  .toc-title {
+    font-size: 1.05rem;
+    font-family: var(--font-heading);
+    color: var(--color-paper-50);
+    margin: 0;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .toc-item {
+    line-height: 1.5;
+  }
+
+  .toc-depth-3 {
+    padding-left: 1.25rem;
+    font-size: 0.9em;
+  }
+
+  .toc-link {
+    color: var(--color-mist-300);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: color var(--transition-fast), padding-left var(--transition-fast);
+    display: inline-block;
+  }
+
+  .toc-link:hover, .toc-link.is-active {
+    color: var(--color-gold-300);
+    padding-left: 4px;
+  }
+</style>
+
+<script>
+  function setupTocHighlight() {
+    const links = document.querySelectorAll('.toc-link');
+    if (!links.length) return;
+
+    const headingIds = Array.from(links).map((link) => link.getAttribute('href')?.slice(1)).filter(Boolean);
+    const headings = headingIds.map((id) => document.getElementById(id!)).filter(Boolean);
+
+    function onScroll() {
+      let activeId = '';
+      const scrollPos = window.scrollY + 120;
+
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const h = headings[i];
+        if (h && h.offsetTop <= scrollPos) {
+          activeId = h.id;
+          break;
+        }
+      }
+
+      links.forEach((link) => {
+        if (link.getAttribute('href') === `#${activeId}`) {
+          link.classList.add('is-active');
+        } else {
+          link.classList.remove('is-active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  setupTocHighlight();
+  document.addEventListener('astro:page-load', setupTocHighlight);
+</script>

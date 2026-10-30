@@ -1,0 +1,173 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../utils/urls';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, slug, tags, role, status, cover, coverAlt } = project.data;
+---
+
+<article class="sword-card project-card reveal-on-scroll">
+  {cover && (
+    <div class="project-cover-wrap">
+      <img
+        src={withBase(cover)}
+        alt={coverAlt || title}
+        class="project-cover-img"
+        loading="lazy"
+        width="600"
+        height="360"
+      />
+      <div class="project-badges">
+        <span class="status-badge">{status}</span>
+        <span class="role-badge">{role}</span>
+      </div>
+    </div>
+  )}
+
+  <div class="project-content">
+    <div class="project-tags">
+      {tags.map((tag: string) => (
+        <span class="tag-badge">{tag}</span>
+      ))}
+    </div>
+
+    <h3 class="project-title">
+      <a href={withBase(`/projects/${slug}/`)}>
+        {title}
+      </a>
+    </h3>
+
+    <p class="project-desc">{description}</p>
+
+    <div class="project-footer">
+      <a href={withBase(`/projects/${slug}/`)} class="project-link">
+        <span>Xem chi tiết kiếm pháp</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+  }
+
+  .project-cover-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-ink-950);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .project-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+  }
+
+  .project-card:hover .project-cover-img {
+    transform: scale(1.03);
+  }
+
+  .project-badges {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: rgba(181, 71, 56, 0.9);
+    color: #ffffff;
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .role-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: rgba(24, 35, 31, 0.85);
+    color: var(--color-gold-300);
+    border: 1px solid rgba(181, 154, 99, 0.3);
+  }
+
+  .project-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .project-title {
+    font-size: 1.35rem;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .project-title a {
+    color: var(--color-paper-50);
+  }
+
+  .project-title a:hover {
+    color: var(--color-gold-300);
+  }
+
+  .project-desc {
+    font-size: 0.9375rem;
+    color: var(--color-mist-300);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .project-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(200, 211, 202, 0.08);
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-gold-300);
+    transition: gap var(--transition-fast);
+  }
+
+  .project-card:hover .project-link {
+    color: var(--color-paper-50);
+    gap: 0.65rem;
+  }
+</style>

@@ -1,0 +1,331 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroScene from '../components/HeroScene.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostCard from '../components/PostCard.astro';
+import { siteConfig } from '../config/site';
+import { withBase } from '../utils/urls';
+import { getPublishedPosts, getPublishedProjects } from '../utils/content';
+
+const allPosts = await getCollection('posts');
+const allProjects = await getCollection('projects');
+
+const publishedPosts = getPublishedPosts(allPosts);
+const publishedProjects = getPublishedProjects(allProjects);
+
+const featuredProjects = publishedProjects.filter((p) => p.data.featured).slice(0, 2);
+const latestPosts = publishedPosts.slice(0, 2);
+
+// Danh mục kỹ năng kiếm hiệp
+const skillGroups = [
+  {
+    title: 'Nội Công Căn Bản',
+    desc: 'Nền tảng vững như bàn thạch, tinh thông tiêu chuẩn quốc tế',
+    skills: ['TypeScript Strict', 'JavaScript ESNext', 'HTML5 Semantic', 'CSS3 Modern & Tokens'],
+  },
+  {
+    title: 'Kiếm Pháp Giao Diện',
+    desc: 'Chiêu thức linh hoạt, thanh thoát như gió, tối ưu hiệu năng',
+    skills: ['Astro Static-First', 'Web Performance (Core Web Vitals)', 'Accessibility (WCAG AA)', 'Responsive & Mobile First'],
+  },
+  {
+    title: 'Tâm Pháp Kiến Trúc',
+    desc: 'Tư duy phân tầng mạch lạc, dễ bảo trì và mở rộng',
+    skills: ['Clean Architecture', 'SOLID Principles', 'Git & CI/CD Pipelines', 'Markdown Content Pipelines'],
+  },
+];
+---
+
+<BaseLayout
+  title={`${siteConfig.author.displayName} | Portfolio Kiếm Hiệp`}
+  description={siteConfig.siteDescription}
+>
+  <!-- Màn mở đầu sơn thủy (Hero) -->
+  <HeroScene />
+
+  <!-- Phần: Giới thiệu ngắn & Nội công kỹ năng -->
+  <section class="section skills-section" id="skills">
+    <div class="container">
+      <div class="section-header reveal-on-scroll">
+        <span class="section-seal" aria-hidden="true">武</span>
+        <h2 class="section-title">Nội Công &amp; Kiếm Pháp</h2>
+        <p class="section-subtitle">
+          Một người lập trình viên chân chính không chạy theo chiêu thức nhất thời, mà tôi luyện kỹ năng căn bản đến độ thuần thục.
+        </p>
+      </div>
+
+      <div class="skills-grid">
+        {skillGroups.map((group) => (
+          <div class="sword-card skill-card reveal-on-scroll">
+            <h3 class="skill-group-title">{group.title}</h3>
+            <p class="skill-group-desc">{group.desc}</p>
+            <ul class="skill-list">
+              {group.skills.map((skill) => (
+                <li class="skill-item">
+                  <span class="skill-bullet" aria-hidden="true">✦</span>
+                  <span>{skill}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Nét cọ phân cách -->
+  <div class="brush-separator" aria-hidden="true"></div>
+
+  <!-- Phần: Tác phẩm nổi bật (Dự án tiêu biểu) -->
+  <section class="section projects-section" id="projects">
+    <div class="container">
+      <div class="section-header reveal-on-scroll">
+        <div class="header-with-action">
+          <div>
+            <span class="section-seal" aria-hidden="true">劍</span>
+            <h2 class="section-title">Tác Phẩm Tiêu Biểu</h2>
+            <p class="section-subtitle">
+              Những dự án đúc kết tâm huyết, kết hợp mỹ thuật cổ phong cùng công nghệ web hiện đại.
+            </p>
+          </div>
+          <a href={withBase('/projects/')} class="btn btn-secondary view-all-btn">
+            <span>Toàn bộ tác phẩm</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="projects-grid">
+        {featuredProjects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Nét cọ phân cách -->
+  <div class="brush-separator" aria-hidden="true"></div>
+
+  <!-- Phần: Bút ký giang hồ (Bài viết mới) -->
+  <section class="section posts-section" id="posts">
+    <div class="container">
+      <div class="section-header reveal-on-scroll">
+        <div class="header-with-action">
+          <div>
+            <span class="section-seal" aria-hidden="true">墨</span>
+            <h2 class="section-title">Bút Ký Mới Nhất</h2>
+            <p class="section-subtitle">
+              Nơi ghi chép lại những trải nghiệm, đúc kết kỹ thuật và góc nhìn lập trình.
+            </p>
+          </div>
+          <a href={withBase('/posts/')} class="btn btn-secondary view-all-btn">
+            <span>Đọc tất cả bài viết</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="posts-grid">
+        {latestPosts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Nét cọ phân cách -->
+  <div class="brush-separator" aria-hidden="true"></div>
+
+  <!-- Lời mời liên hệ / Kết giao -->
+  <section class="section contact-cta-section">
+    <div class="container">
+      <div class="sword-card contact-cta-card reveal-on-scroll">
+        <div class="cta-inner">
+          <span class="seal-mark" aria-hidden="true">信</span>
+          <h2 class="cta-title">Hữu Duyên Tương Ngộ</h2>
+          <p class="cta-lead">
+            Dù là trao đổi về công nghệ, tìm kiếm người đồng hành cho dự án hay đơn giản là cùng đàm đạo về kiếm hiệp, tôi luôn sẵn sàng lắng nghe.
+          </p>
+          <div class="cta-buttons">
+            <a href={withBase('/contact/')} class="btn btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
+              <span>Gửi thư kết giao</span>
+            </a>
+            <a href={withBase('/about/')} class="btn btn-ghost">
+              <span>Tìm hiểu thêm về tôi</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .header-with-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .section-seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: var(--color-gold-400);
+    color: var(--color-ink-950);
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    margin: 0.25rem 0 0.5rem 0;
+    color: var(--color-paper-50);
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-mist-300);
+    max-width: 640px;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .view-all-btn {
+    flex-shrink: 0;
+  }
+
+  /* Skills Grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .skill-card {
+    padding: 2rem;
+  }
+
+  .skill-group-title {
+    font-size: 1.35rem;
+    color: var(--color-gold-300);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-group-desc {
+    font-size: 0.9rem;
+    color: var(--color-mist-300);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .skill-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.95rem;
+    color: var(--color-paper-100);
+  }
+
+  .skill-bullet {
+    color: var(--color-gold-400);
+    font-size: 0.75rem;
+  }
+
+  /* Projects Grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2rem;
+  }
+
+  /* CTA Card */
+  .contact-cta-card {
+    padding: 3.5rem 2rem;
+    text-align: center;
+    background: radial-gradient(circle at center, rgba(30, 44, 38, 0.9), rgba(17, 25, 22, 0.95));
+    border: 1px solid var(--border-gold);
+  }
+
+  .cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-paper-50);
+  }
+
+  .cta-lead {
+    font-size: 1.05rem;
+    color: var(--color-mist-300);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .projects-grid, .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-cta-card {
+      padding: 2rem 1.25rem;
+    }
+  }
+</style>

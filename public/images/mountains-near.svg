@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" preserveAspectRatio="none" width="1440" height="400">
+  <defs>
+    <linearGradient id="nearGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#18231f" stop-opacity="0.95"/>
+      <stop offset="40%" stop-color="#141d1a" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#111916" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <!-- Rặng núi gần mực đậm -->
+  <path d="M0,180 L120,240 L260,110 L380,210 L520,130 L640,190 L820,90 L980,230 L1120,140 L1260,200 L1440,120 L1440,400 L0,400 Z" fill="url(#nearGrad)"/>
+  <!-- Điểm xuyết viền vàng mỏng trên đỉnh núi -->
+  <path d="M260,110 L275,125 M520,130 L540,145 M820,90 L840,110 M1120,140 L1140,155" stroke="rgba(181, 154, 99, 0.4)" stroke-width="2" stroke-linecap="round"/>
+</svg>

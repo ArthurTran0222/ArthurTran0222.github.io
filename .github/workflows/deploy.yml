@@ -1,0 +1,61 @@
+name: Triển khai GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Quyền tối thiểu bảo mật cho GitHub Pages và OIDC
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Không cho phép 2 deployment chạy đồng thời
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Website Tĩnh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Thiết lập Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Cài đặt dependencies bằng lockfile
+        run: npm ci
+
+      - name: Kiểm tra tính toàn vẹn kiểu dữ liệu (Type check)
+        run: npm run check
+
+      - name: Build Astro tĩnh
+        run: npm run build
+        env:
+          # GitHub Actions tự động cung cấp repository context nếu cần
+          # Cho phép linh hoạt cấu hình base path qua GitHub repository
+          NODE_ENV: production
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    name: Phát hành lên GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

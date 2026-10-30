@@ -1,0 +1,112 @@
+---
+import { siteConfig } from '../config/site';
+import { withBase, toAbsoluteUrl } from '../utils/urls';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const {
+  title = siteConfig.siteTitle,
+  description = siteConfig.siteDescription,
+  image = '/images/bg-where-winds-meet.jpg',
+  article = false,
+} = Astro.props;
+
+const canonicalUrl = toAbsoluteUrl(Astro.url.pathname);
+const ogImageUrl = toAbsoluteUrl(image);
+---
+
+<!doctype html>
+<html lang="vi" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title === siteConfig.siteTitle ? title : `${title} | ${siteConfig.author.displayName}`}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <meta name="theme-color" content="#101915" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImageUrl} />
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.author.displayName} - Bút Ký Giang Hồ`} href={withBase('/rss.xml')} />
+
+    <!-- Script chặn FOUC cho Reduced Motion ngay trước khi render -->
+    <script is:inline>
+      (function() {
+        var saved = localStorage.getItem('kiemhiep-reduced-motion');
+        var prefers = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (saved === 'true' || (saved === null && prefers)) {
+          document.documentElement.setAttribute('data-reduced-motion', 'true');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Đường dẫn tắt hỗ trợ người dùng bàn phím -->
+    <a href="#main-content" class="skip-link">Bỏ qua điều hướng, tới nội dung chính</a>
+
+    <!-- KHUNG HÌNH NỀN ĐIỆN ẢNH WHERE WINDS MEET CÓ HIỆU ỨNG MỜ BẢO ĐẢM TẦM NHÌN NỘI DUNG -->
+    <div class="site-cinematic-bg" aria-hidden="true">
+      <img
+        src={withBase('/images/bg-where-winds-meet.jpg')}
+        alt=""
+        class="cinematic-bg-photo"
+        loading="eager"
+        decoding="sync"
+      />
+      <!-- Lớp làm mờ sương và gradient giúp chữ luôn nổi bật và đạt chuẩn WCAG AA -->
+      <div class="cinematic-bg-overlay"></div>
+      <div class="cinematic-bg-gradient"></div>
+      <div class="cinematic-bg-grain"></div>
+
+      <!-- Hiệu ứng lá phong đỏ Where Winds Meet rơi lững lờ -->
+      <div class="maple-leaves-layer">
+        <span class="maple-leaf leaf-1"></span>
+        <span class="maple-leaf leaf-2"></span>
+        <span class="maple-leaf leaf-3"></span>
+        <span class="maple-leaf leaf-4"></span>
+        <span class="maple-leaf leaf-5"></span>
+        <span class="maple-leaf leaf-6"></span>
+      </div>
+    </div>
+
+    <!-- Thanh header chính -->
+    <Header />
+
+    <!-- Vùng nội dung trang -->
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <!-- Chân trang -->
+    <Footer />
+
+    <!-- Script hiệu ứng chuyển động -->
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

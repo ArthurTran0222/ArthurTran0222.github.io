@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect x="4" y="4" width="56" height="56" rx="8" fill="#b54738" stroke="#cfb882" stroke-width="2"/>
+  <!-- Họa tiết triện cổ phong & mũi kiếm vàng -->
+  <path d="M32 12 L36 28 L44 32 L36 36 L32 52 L28 36 L20 32 L28 28 Z" fill="#cfb882"/>
+  <circle cx="32" cy="32" r="3" fill="#111916"/>
+  <rect x="12" y="12" width="40" height="40" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="2 2"/>
+</svg>

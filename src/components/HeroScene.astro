@@ -1,0 +1,382 @@
+---
+import { siteConfig } from '../config/site';
+import { withBase } from '../utils/urls';
+---
+
+<section class="hero-section" id="hero">
+  <!-- Lớp chiều sâu sơn thủy kết hợp cùng ảnh nền Where Winds Meet -->
+  <div class="hero-art-backdrop" aria-hidden="true">
+    <!-- Lớp núi xa mờ trong sương -->
+    <div class="art-layer layer-far parallax-layer" data-speed="0.12">
+      <img
+        src={withBase('/images/mountains-far.svg')}
+        alt=""
+        width="1440"
+        height="480"
+        class="mountain-img"
+        loading="eager"
+        decoding="sync"
+      />
+    </div>
+
+    <!-- Lớp sương trôi thứ nhất -->
+    <div class="mist-layer mist-layer-1">
+      <img
+        src={withBase('/images/mist-texture.svg')}
+        alt=""
+        width="1440"
+        height="240"
+        class="mist-img"
+        loading="eager"
+      />
+    </div>
+
+    <!-- Lớp núi gần nét cọ mực tàu loãng -->
+    <div class="art-layer layer-near parallax-layer" data-speed="0.25">
+      <img
+        src={withBase('/images/mountains-near.svg')}
+        alt=""
+        width="1440"
+        height="400"
+        class="mountain-img"
+        loading="eager"
+        decoding="sync"
+      />
+    </div>
+
+    <!-- Lớp sương trôi thứ hai -->
+    <div class="mist-layer mist-layer-2">
+      <img
+        src={withBase('/images/mist-texture.svg')}
+        alt=""
+        width="1440"
+        height="240"
+        class="mist-img"
+        loading="eager"
+      />
+    </div>
+
+    <!-- Gradient chân hero hòa quyện vào các phần tiếp theo -->
+    <div class="hero-bottom-fade"></div>
+  </div>
+
+  <!-- Nội dung chữ nổi bật (Được bảo vệ bởi kính mờ Frosted Glass không che lấp kiếm khách) -->
+  <div class="container hero-container">
+    <div class="hero-content">
+      <!-- Ảnh đại diện tác giả -->
+      <div class="hero-avatar-wrap">
+        <img
+          src={withBase('/images/avatar.jpg')}
+          alt={`Ảnh đại diện ${siteConfig.author.fullName}`}
+          class="hero-avatar-img"
+          width="90"
+          height="90"
+          loading="eager"
+          decoding="sync"
+        />
+        <span class="hero-avatar-ring" aria-hidden="true"></span>
+      </div>
+
+      <!-- Tag phong thái kiếm hiệp mang sắc đỏ lá phong -->
+      <div class="hero-badge-wrap">
+        <span class="hero-seal" aria-hidden="true">楓</span>
+        <span class="hero-badge">{siteConfig.author.role}</span>
+      </div>
+
+      <!-- Tên tác giả & Danh xưng -->
+      <h1 class="hero-title">
+        <span class="hero-salutation">Bút danh:</span> {siteConfig.author.displayName}
+      </h1>
+
+      <p class="hero-fullname">
+        Tên thật: <strong>{siteConfig.author.fullName}</strong>
+      </p>
+
+      <!-- Khẩu khí & Lời mở đầu -->
+      <p class="hero-lead">
+        Lấy code làm kiếm chiêu, lấy tư duy thuật toán làm nội công tâm pháp.
+        Rèn luyện những sản phẩm tĩnh mượt mà, thanh thoát như ngọn gió thổi qua rừng phong giữa chốn giang hồ số.
+      </p>
+
+      <!-- Hai nút CTA hành động trực tiếp -->
+      <div class="hero-actions">
+        <a href={withBase('/projects/')} class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="13 2 13 9 20 9"></polyline>
+            <path d="M13 2v7h7"></path>
+            <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l7 7z"></path>
+          </svg>
+          <span>Xem tác phẩm</span>
+        </a>
+
+        <a href={withBase('/posts/')} class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <span>Đọc bút ký</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    position: relative;
+    min-height: 88svh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  /* Nền nghệ thuật sơn thủy có độ trong suốt để lộ ảnh Where Winds Meet */
+  .hero-art-backdrop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .art-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .layer-far {
+    bottom: 50px;
+    opacity: 0.45; /* Độ trong suốt tinh tế để ảnh nền trúc lâm hiện ra */
+  }
+
+  .layer-near {
+    bottom: -15px;
+    opacity: 0.55;
+  }
+
+  .mountain-img, .mist-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .hero-bottom-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 180px;
+    background: linear-gradient(to top, var(--bg-primary) 15%, transparent);
+  }
+
+  /* Khối nội dung chữ nằm lệch sang bên trái, giữ tầm nhìn nhân vật ở bên phải */
+  .hero-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-content {
+    max-width: 720px;
+    background: rgba(14, 22, 18, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 2.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(225, 78, 56, 0.3);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(197, 57, 39, 0.12);
+    animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes heroFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-avatar-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-avatar-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 3px rgba(197, 57, 39, 0.55), 0 6px 24px rgba(0,0,0,0.5);
+  }
+
+  /* Vòng hào quang nhấp nháy nhẹ màu phong diệp */
+  .hero-avatar-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-maple-400);
+    opacity: 0.75;
+    animation: avatarRingPulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes avatarRingPulse {
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50%       { opacity: 0.3;  transform: scale(1.06); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-avatar-ring { animation: none; }
+  }
+
+  [data-reduced-motion="true"] .hero-avatar-ring { animation: none; }
+
+  .hero-badge-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--color-maple-500);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 4px;
+    box-shadow: var(--shadow-maple);
+  }
+
+  .hero-badge {
+    font-size: 0.875rem;
+    color: var(--color-amber-300);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    color: var(--color-paper-50);
+  }
+
+  .hero-salutation {
+    font-size: 0.6em;
+    font-weight: 400;
+    color: var(--color-mist-300);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .hero-fullname {
+    font-size: 1.05rem;
+    color: var(--color-mist-300);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-fullname strong {
+    color: var(--color-paper-100);
+    font-weight: 600;
+  }
+
+  .hero-lead {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.8;
+    color: var(--color-paper-200);
+    margin-bottom: 2.25rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      min-height: auto;
+      padding-top: 2rem;
+      padding-bottom: 3.5rem;
+    }
+
+    .hero-content {
+      padding: 1.5rem;
+      max-width: 100%;
+    }
+
+    .art-layer {
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  function setupParallax() {
+    const isMobile = window.innerWidth < 768;
+    const prefersReduced = document.documentElement.getAttribute('data-reduced-motion') === 'true' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isMobile || prefersReduced) return;
+
+    const layers = document.querySelectorAll<HTMLElement>('.parallax-layer');
+    if (!layers.length) return;
+
+    let ticking = false;
+
+    function update() {
+      const scrollY = window.scrollY;
+      if (scrollY > window.innerHeight) {
+        ticking = false;
+        return;
+      }
+
+      layers.forEach((layer) => {
+        const speed = parseFloat(layer.getAttribute('data-speed') || '0.2');
+        const yPos = -(scrollY * speed);
+        layer.style.transform = `translate3d(0, ${yPos}px, 0)`;
+      });
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  setupParallax();
+  document.addEventListener('astro:page-load', setupParallax);
+</script>

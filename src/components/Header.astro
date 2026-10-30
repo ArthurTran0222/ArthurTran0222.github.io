@@ -1,0 +1,444 @@
+---
+import { siteConfig } from '../config/site';
+import { withBase } from '../utils/urls';
+import MotionToggle from './MotionToggle.astro';
+
+const pathname = Astro.url.pathname;
+const base = import.meta.env.BASE_URL || '/';
+
+function isActive(itemPath: string): boolean {
+  const fullItemPath = withBase(itemPath);
+  if (itemPath === '/') {
+    return pathname === base || pathname === `${base}/` || pathname === '/';
+  }
+  return pathname.startsWith(fullItemPath);
+}
+---
+
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <!-- Brand / Dấu triện kiếm hiệp -->
+    <a href={withBase('/')} class="header-brand" aria-label="Trang chủ - Arthur Heisenberg">
+      <span class="brand-seal" aria-hidden="true">義</span>
+      <div class="brand-text">
+        <span class="brand-name">{siteConfig.author.displayName}</span>
+        <span class="brand-role">{siteConfig.author.role}</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="nav-desktop" aria-label="Điều hướng chính">
+      <ul class="nav-list">
+        {siteConfig.nav.map((item) => (
+          <li>
+            <a
+              href={withBase(item.path)}
+              class:list={['nav-link', { active: isActive(item.path) }]}
+              aria-current={isActive(item.path) ? 'page' : undefined}
+            >
+              <span class="nav-link-label">{item.label}</span>
+              {item.sublabel && <span class="nav-link-sublabel">{item.sublabel}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Header Actions (Motion Toggle + Mobile Toggle) -->
+    <div class="header-actions">
+      <MotionToggle />
+
+      <button
+        type="button"
+        class="mobile-menu-btn"
+        id="mobile-menu-trigger"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+        aria-label="Mở bảng điều hướng"
+      >
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Overlay -->
+  <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop" aria-hidden="true"></div>
+
+  <!-- Mobile Navigation Drawer -->
+  <div
+    class="mobile-drawer"
+    id="mobile-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Bảng điều hướng di động"
+    hidden
+  >
+    <div class="mobile-drawer-header">
+      <div class="drawer-brand">
+        <span class="brand-seal" aria-hidden="true">義</span>
+        <span class="drawer-title">Giang Hồ Chỉ Lộ</span>
+      </div>
+      <button
+        type="button"
+        class="drawer-close-btn"
+        id="mobile-drawer-close"
+        aria-label="Đóng bảng điều hướng"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Điều hướng di động">
+      <ul class="mobile-nav-list">
+        {siteConfig.nav.map((item) => (
+          <li>
+            <a
+              href={withBase(item.path)}
+              class:list={['mobile-nav-link', { active: isActive(item.path) }]}
+              aria-current={isActive(item.path) ? 'page' : undefined}
+            >
+              <span class="mobile-label">{item.label}</span>
+              {item.sublabel && <span class="mobile-sublabel">{item.sublabel}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: rgba(17, 25, 22, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    z-index: 100;
+    transition: background-color var(--transition-normal);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  /* Brand styling */
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: var(--color-paper-50);
+    text-decoration: none;
+  }
+
+  .brand-seal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-cinnabar-500);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-cinnabar);
+    flex-shrink: 0;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-paper-50);
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+
+  .brand-role {
+    font-size: 0.75rem;
+    color: var(--color-mist-300);
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* Desktop Nav */
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-mist-300);
+    text-decoration: none;
+    padding: 0.4rem 0.6rem;
+    position: relative;
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link-label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .nav-link-sublabel {
+    font-size: 0.6875rem;
+    color: var(--color-gold-400);
+    font-family: var(--font-heading);
+    opacity: 0.8;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-paper-50);
+  }
+
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--color-maple-400);
+    border-radius: 1px;
+    box-shadow: 0 0 8px rgba(225, 78, 56, 0.6);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Mobile menu button */
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  .hamburger-line {
+    width: 22px;
+    height: 2px;
+    background-color: var(--color-paper-100);
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  /* Mobile Drawer Overlay & Panel */
+  .mobile-drawer-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+
+  .mobile-drawer-backdrop.is-open {
+    display: block;
+    opacity: 1;
+  }
+
+  .mobile-drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background: var(--color-ink-950);
+    border-left: 1px solid var(--border-gold);
+    z-index: 1001;
+    padding: 1.5rem;
+    transform: translateX(100%);
+    transition: transform var(--transition-normal);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+  }
+
+  .mobile-drawer.is-open {
+    transform: translateX(0);
+  }
+
+  .mobile-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 1.5rem;
+  }
+
+  .drawer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .drawer-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--color-gold-300);
+  }
+
+  .drawer-close-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--color-mist-300);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  .drawer-close-btn:hover {
+    color: var(--color-paper-50);
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    color: var(--color-mist-300);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    min-height: 44px;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background: var(--color-ink-800);
+    color: var(--color-paper-50);
+    border-left: 3px solid var(--color-cinnabar-500);
+  }
+
+  .mobile-label {
+    font-size: 1.05rem;
+    font-weight: 500;
+  }
+
+  .mobile-sublabel {
+    font-size: 0.8rem;
+    color: var(--color-gold-400);
+    font-family: var(--font-heading);
+  }
+
+  /* Responsive breakpoints */
+  @media (max-width: 860px) {
+    .nav-desktop {
+      display: none;
+    }
+    .mobile-menu-btn {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  function setupMobileDrawer() {
+    const trigger = document.getElementById('mobile-menu-trigger');
+    const drawer = document.getElementById('mobile-drawer');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+    const closeBtn = document.getElementById('mobile-drawer-close');
+
+    if (!trigger || !drawer || !backdrop || !closeBtn) return;
+
+    function openDrawer() {
+      drawer?.removeAttribute('hidden');
+      requestAnimationFrame(() => {
+        drawer?.classList.add('is-open');
+        backdrop?.classList.add('is-open');
+        trigger?.setAttribute('aria-expanded', 'true');
+        closeBtn?.focus();
+      });
+    }
+
+    function closeDrawer() {
+      drawer?.classList.remove('is-open');
+      backdrop?.classList.remove('is-open');
+      trigger?.setAttribute('aria-expanded', 'false');
+      setTimeout(() => {
+        drawer?.setAttribute('hidden', '');
+        trigger?.focus();
+      }, 250);
+    }
+
+    trigger.addEventListener('click', () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+      if (isExpanded) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    // Bàn phím: phím Escape đóng drawer
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+        closeDrawer();
+      }
+    });
+  }
+
+  setupMobileDrawer();
+  document.addEventListener('astro:page-load', setupMobileDrawer);
+</script>

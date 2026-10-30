@@ -1,0 +1,305 @@
+/* Hiệu ứng chuyển động kiếm hiệp tinh tế & Lá phong Where Winds Meet */
+
+/* Keyframe lá phong rơi lững lờ theo gió */
+@keyframes mapleLeafFall1 {
+  0% {
+    transform: translate3d(0, -20px, 0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate3d(60px, 45vh, 0) rotate(140deg);
+  }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-20px, 105vh, 0) rotate(320deg);
+    opacity: 0;
+  }
+}
+
+@keyframes mapleLeafFall2 {
+  0% {
+    transform: translate3d(0, -20px, 0) rotate(45deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  55% {
+    transform: translate3d(-70px, 50vh, 0) rotate(210deg);
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(40px, 105vh, 0) rotate(390deg);
+    opacity: 0;
+  }
+}
+
+@keyframes mapleLeafFall3 {
+  0% {
+    transform: translate3d(0, -20px, 0) rotate(90deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.65;
+  }
+  60% {
+    transform: translate3d(90px, 55vh, 0) rotate(260deg);
+  }
+  90% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate3d(20px, 105vh, 0) rotate(480deg);
+    opacity: 0;
+  }
+}
+
+/* Lớp chứa lá phong bay */
+.maple-leaves-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.maple-leaf {
+  position: absolute;
+  top: -30px;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='%23c53927'%3E%3Cpath d='M16,2 C17,6 20,8 24,7 C23,11 26,13 30,14 C27,17 26,20 27,24 C23,23 20,25 18,29 L16,31 L14,29 C12,25 9,23 5,24 C6,20 5,17 2,14 C6,13 9,11 8,7 C12,8 15,6 16,2 Z'/%3E%3Cpath d='M16,14 L16,30' stroke='%237e1e12' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+}
+
+.leaf-1 {
+  left: 15%;
+  animation: mapleLeafFall1 16s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 0s;
+  width: 22px;
+  height: 22px;
+}
+
+.leaf-2 {
+  left: 45%;
+  animation: mapleLeafFall2 20s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 4s;
+  width: 26px;
+  height: 26px;
+  filter: hue-rotate(15deg); /* Hổ phách cam */
+}
+
+.leaf-3 {
+  left: 75%;
+  animation: mapleLeafFall3 18s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 8s;
+  width: 18px;
+  height: 18px;
+}
+
+.leaf-4 {
+  left: 30%;
+  animation: mapleLeafFall1 22s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 11s;
+  width: 20px;
+  height: 20px;
+  filter: brightness(0.9);
+}
+
+.leaf-5 {
+  left: 88%;
+  animation: mapleLeafFall2 17s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 3s;
+  width: 24px;
+  height: 24px;
+}
+
+.leaf-6 {
+  left: 5%;
+  animation: mapleLeafFall3 24s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 14s;
+  width: 20px;
+  height: 20px;
+}
+
+/* Keyframe sương trôi lững lờ */
+@keyframes mistDriftLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-3%, 2px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes mistDriftRight {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(3%, -2px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Các lớp sương mù */
+.mist-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center bottom;
+  will-change: transform;
+}
+
+.mist-layer-1 {
+  opacity: 0.22;
+  animation: mistDriftLeft 25s ease-in-out infinite;
+}
+
+.mist-layer-2 {
+  opacity: 0.16;
+  animation: mistDriftRight 35s ease-in-out infinite;
+}
+
+/* Section Reveal qua IntersectionObserver */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Khi JS tắt: fallback tự động hiện nội dung */
+html.no-js .reveal-on-scroll {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Thanh đo tiến độ đọc bài viết (Reading Progress Bar) mang sắc đỏ phong diệp & hổ phách */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-amber-400), var(--color-maple-500));
+  width: 0%;
+  z-index: 200;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+/* Nút Back-to-Top */
+#back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  background: rgba(20, 32, 27, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-maple);
+  color: var(--color-paper-100);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-subtle);
+}
+
+#back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#back-to-top:hover {
+  background: var(--color-ink-700);
+  border-color: var(--color-maple-400);
+  transform: translateY(-2px);
+  color: var(--color-amber-300);
+  box-shadow: var(--shadow-maple);
+}
+
+/* Tôn trọng Reduced Motion (Cả qua OS lẫn Nút chuyển đổi giao diện) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .mist-layer-1, .mist-layer-2 {
+    animation: none !important;
+  }
+
+  .maple-leaves-layer {
+    display: none !important;
+  }
+
+  .parallax-layer {
+    transform: none !important;
+  }
+}
+
+[data-reduced-motion="true"] *,
+[data-reduced-motion="true"] ::before,
+[data-reduced-motion="true"] ::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+[data-reduced-motion="true"] .reveal-on-scroll {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+[data-reduced-motion="true"] .mist-layer-1,
+[data-reduced-motion="true"] .mist-layer-2 {
+  animation: none !important;
+}
+
+[data-reduced-motion="true"] .maple-leaves-layer {
+  display: none !important;
+}
+
+[data-reduced-motion="true"] .parallax-layer {
+  transform: none !important;
+}

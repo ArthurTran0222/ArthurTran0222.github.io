@@ -1,0 +1,197 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../utils/urls';
+import { calculateReadingTime, slugify } from '../utils/content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, description, slug, pubDate, tags, cover, coverAlt } = post.data;
+
+// Định dạng ngày tháng tiếng Việt
+const formattedDate = new Intl.DateTimeFormat('vi-VN', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(pubDate);
+
+// Tính thời gian đọc
+const reading = calculateReadingTime(post.body || '');
+---
+
+<article class="sword-card post-card reveal-on-scroll">
+  {cover && (
+    <div class="post-cover-wrap">
+      <img
+        src={withBase(cover)}
+        alt={coverAlt || title}
+        class="post-cover-img"
+        loading="lazy"
+        width="800"
+        height="450"
+      />
+    </div>
+  )}
+
+  <div class="post-content">
+    <div class="post-meta">
+      <time datetime={pubDate.toISOString()} class="post-date">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>{formattedDate}</span>
+      </time>
+
+      <span class="meta-dot" aria-hidden="true">•</span>
+
+      <span class="reading-time">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>{reading.text}</span>
+      </span>
+    </div>
+
+    <h3 class="post-title">
+      <a href={withBase(`/posts/${slug}/`)}>
+        {title}
+      </a>
+    </h3>
+
+    <p class="post-desc">{description}</p>
+
+    <div class="post-footer">
+      <div class="post-tags">
+        {tags.map((tag: string) => (
+          <a href={withBase(`/tags/${slugify(tag)}/`)} class="tag-badge">
+            #{tag}
+          </a>
+        ))}
+      </div>
+
+      <a href={withBase(`/posts/${slug}/`)} class="post-read-more" aria-label={`Đọc bài viết: ${title}`}>
+        <span>Đọc tiếp</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+  }
+
+  .post-cover-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-ink-950);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .post-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+  }
+
+  .post-card:hover .post-cover-img {
+    transform: scale(1.03);
+  }
+
+  .post-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.8125rem;
+    color: var(--color-mist-300);
+    margin-bottom: 0.75rem;
+  }
+
+  .post-date, .reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .meta-dot {
+    color: var(--color-gold-400);
+    opacity: 0.6;
+  }
+
+  .post-title {
+    font-size: 1.35rem;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .post-title a {
+    color: var(--color-paper-50);
+  }
+
+  .post-title a:hover {
+    color: var(--color-gold-300);
+  }
+
+  .post-desc {
+    font-size: 0.9375rem;
+    color: var(--color-mist-300);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(200, 211, 202, 0.08);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .post-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gold-300);
+    transition: gap var(--transition-fast);
+  }
+
+  .post-card:hover .post-read-more {
+    color: var(--color-paper-50);
+    gap: 0.65rem;
+  }
+</style>

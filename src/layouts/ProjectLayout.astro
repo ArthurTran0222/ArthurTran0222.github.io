@@ -1,0 +1,231 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { withBase } from '../utils/urls';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  otherProjects: CollectionEntry<'projects'>[];
+}
+
+const { project, otherProjects } = Astro.props;
+const { title, description, pubDate, tags, role, status, demoUrl, repoUrl, cover, coverAlt } = project.data;
+
+const formattedDate = new Intl.DateTimeFormat('vi-VN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(pubDate);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={cover || '/images/projects/project-1.svg'}
+>
+  <article class="project-detail-article">
+    <header class="project-header">
+      <div class="container container-prose">
+        <a href={withBase('/projects/')} class="back-nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Trở về Danh sách tác phẩm</span>
+        </a>
+
+        <div class="project-meta-badges">
+          <span class="status-badge">{status}</span>
+          <span class="role-badge">Vai trò: {role}</span>
+          <span class="date-badge">Hoàn thành: {formattedDate}</span>
+        </div>
+
+        <h1 class="project-main-title">{title}</h1>
+
+        <p class="project-main-desc">{description}</p>
+
+        <!-- Tags công nghệ -->
+        <div class="project-tech-tags">
+          {tags.map((tag: string) => (
+            <span class="tag-badge">{tag}</span>
+          ))}
+        </div>
+
+        <!-- Các liên kết demo / repository nếu có -->
+        {(demoUrl || repoUrl) && (
+          <div class="project-links-bar">
+            {demoUrl && (
+              <a href={demoUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Trải nghiệm thực tế</span>
+              </a>
+            )}
+
+            {repoUrl && (
+              <a href={repoUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                <span>Xem mã nguồn</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <!-- Ảnh bìa dự án -->
+    {cover && (
+      <div class="container container-prose project-cover-container">
+        <div class="project-cover-wrapper">
+          <img
+            src={withBase(cover)}
+            alt={coverAlt || title}
+            class="project-detail-cover"
+            loading="eager"
+            width="800"
+            height="450"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Nội dung bài viết dự án -->
+    <div class="container container-prose project-body-container">
+      <div class="markdown-prose">
+        <slot />
+      </div>
+    </div>
+
+    <!-- Tác phẩm khác -->
+    {otherProjects.length > 0 && (
+      <section class="other-projects-section">
+        <div class="container">
+          <div class="brush-separator" aria-hidden="true"></div>
+          <h2 class="other-heading">Tác Phẩm Khác</h2>
+          <div class="other-grid">
+            {otherProjects.map((p) => (
+              <a href={withBase(`/projects/${p.data.slug}/`)} class="sword-card other-card">
+                <h3 class="other-title">{p.data.title}</h3>
+                <p class="other-desc">{p.data.description}</p>
+                <span class="other-link">Xem tác phẩm →</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail-article {
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+  }
+
+  .back-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-gold-400);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .back-nav-link:hover {
+    color: var(--color-paper-50);
+    transform: translateX(-3px);
+  }
+
+  .project-meta-badges {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .status-badge {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-cinnabar-500);
+    color: #ffffff;
+  }
+
+  .role-badge {
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-ink-800);
+    color: var(--color-gold-300);
+    border: 1px solid var(--border-gold);
+  }
+
+  .project-main-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    color: var(--color-paper-50);
+  }
+
+  .project-main-desc {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--color-paper-200);
+    margin-bottom: 1.5rem;
+  }
+
+  .project-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-links-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .project-cover-container {
+    margin-bottom: 2.5rem;
+  }
+
+  .project-cover-wrapper {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-gold);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .project-detail-cover {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .markdown-prose {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: var(--text-primary);
+  }
+
+  .markdown-prose :global(h2) {
+    border-bottom: 1px solid rgba(181, 154, 99, 0.2);
+    padding-bottom: 0.5rem;
+  }
+</style>

@@ -1,0 +1,312 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+import { withBase } from '../utils/urls';
+
+const timeline = [
+  {
+    period: 'Hiện tại',
+    title: 'Sinh viên Công nghệ Thông tin & Khám phá Web Tĩnh',
+    desc: 'Tập trung nghiên cứu chuyên sâu về kiến trúc Web hiện đại, tối ưu hiệu năng trang tĩnh (Static Site Generation), chuẩn trợ năng tiếp cận (Accessibility WCAG) và ngôn ngữ TypeScript.',
+  },
+  {
+    period: 'Giai đoạn khởi nhập',
+    title: 'Rèn luyện Nền tảng Thuật toán & Cơ sở Dữ liệu',
+    desc: 'Làm quen với các cấu trúc dữ liệu kinh điển, thuật toán tìm kiếm/sắp xếp, tư duy hướng đối tượng (OOP) và cơ sở dữ liệu quan hệ.',
+  },
+  {
+    period: 'Niềm say mê ban đầu',
+    title: 'Cảm hứng từ Mỹ học Kiếm Hiệp Sơn Thủy',
+    desc: 'Tìm kiếm sự giao thoa giữa nghệ thuật truyền thống phương Đông (thư pháp, mực tàu, sơn thủy hữu tình) với tư duy logic sắc bén của ngành kỹ sư phần mềm.',
+  },
+];
+---
+
+<BaseLayout
+  title="Giới Thiệu Hành Trình"
+  description={`Tiểu sử, định hướng và con đường phát triển của ${siteConfig.author.fullName} (${siteConfig.author.displayName}).`}
+>
+  <div class="about-page">
+    <div class="container container-prose">
+      <!-- Header phần giới thiệu -->
+      <header class="about-header reveal-on-scroll">
+        <span class="seal-mark" aria-hidden="true">志</span>
+        <h1 class="about-title">Hành Trình &amp; Chí Hướng</h1>
+        <p class="about-lead">
+          Lấy code làm kiếm, lấy tư duy làm tâm pháp. Một chặng đường rèn luyện không ngừng nghỉ giữa chốn giang hồ công nghệ.
+        </p>
+      </header>
+
+      <!-- Khối tác giả & Chân dung đại diện -->
+      <div class="sword-card author-profile-card reveal-on-scroll">
+        <div class="profile-avatar-wrap">
+          <img
+            src={withBase('/images/avatar.jpg')}
+            alt={`Chân dung ${siteConfig.author.fullName}`}
+            class="profile-avatar-img"
+            width="160"
+            height="160"
+          />
+        </div>
+        <div class="profile-info">
+          <h2 class="profile-name">{siteConfig.author.fullName}</h2>
+          <p class="profile-alias">Bút danh giang hồ: <strong>{siteConfig.author.displayName}</strong></p>
+          <p class="profile-role">
+            <span class="role-tag">{siteConfig.author.role}</span>
+            <span class="location-tag">📍 {siteConfig.author.location}</span>
+          </p>
+          <p class="profile-bio">{siteConfig.author.bio}</p>
+        </div>
+      </div>
+
+      <!-- Phần: Tâm pháp phát triển (Định hướng) -->
+      <section class="about-section reveal-on-scroll">
+        <h2 class="section-heading">Tâm Pháp &amp; Định Hướng Nghề Nghiệp</h2>
+        <div class="about-prose">
+          <p>
+            Trong thế giới công nghệ biến đổi từng ngày, có vô số framework mới ra đời rồi lại chìm vào dĩ vãng. Thay vì cuốn theo những trào lưu chóng vánh, tôi chọn cho mình con đường:
+          </p>
+          <ul>
+            <li><strong>Chất lượng hơn số lượng:</strong> Mỗi dòng mã viết ra đều phải rõ ràng, có cấu trúc chặt chẽ và dễ bảo trì.</li>
+            <li><strong>Thanh thoát và nhẹ nhàng:</strong> Tối ưu trang web đến từng kilobyte, loại bỏ mọi sự thừa thãi làm chậm trải nghiệm của người đọc.</li>
+            <li><strong>Mở rộng tri thức:</strong> Luôn giữ thái độ khiêm nhường của một người học trò, sẵn sàng tiếp thu những kiến trúc và công nghệ mới.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Nét cọ phân chia -->
+      <div class="brush-separator" aria-hidden="true"></div>
+
+      <!-- Phần: Dấu chân hành trình (Timeline) -->
+      <section class="about-section reveal-on-scroll">
+        <h2 class="section-heading">Dấu Chân Hành Trình</h2>
+        <div class="timeline">
+          {timeline.map((item) => (
+            <div class="timeline-item">
+              <div class="timeline-marker" aria-hidden="true">
+                <span class="marker-dot"></span>
+              </div>
+              <div class="timeline-content">
+                <span class="timeline-period">{item.period}</span>
+                <h3 class="timeline-title">{item.title}</h3>
+                <p class="timeline-desc">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Nét cọ phân chia -->
+      <div class="brush-separator" aria-hidden="true"></div>
+
+      <!-- Phần: Sở thích & Mỹ học -->
+      <section class="about-section reveal-on-scroll">
+        <h2 class="section-heading">Góc Nhìn Mỹ Học &amp; Sở Thích</h2>
+        <div class="about-prose">
+          <p>
+            Ngoài những giờ làm việc cùng màn hình mã lệnh và terminal, tôi tìm thấy niềm hứng khởi từ tiểu thuyết kiếm hiệp Kim Dung, Cổ Long và các tựa game đậm chất sơn thủy như <em>Where Winds Meet</em> hay <em>Black Myth: Wukong</em>.
+          </p>
+          <blockquote>
+            “Đại đạo chí giản. Lập trình hay luyện kiếm, đến tột cùng đều hướng về sự giản dị, tinh thuần và hữu ích cho nhân gian.”
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- Nút điều hướng cuối trang -->
+      <div class="about-footer-nav">
+        <a href={withBase('/projects/')} class="btn btn-primary">
+          <span>Xem các tác phẩm đã hoàn thành</span>
+        </a>
+        <a href={withBase('/contact/')} class="btn btn-secondary">
+          <span>Liên hệ kết giao</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .about-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .about-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin: 0.5rem 0 0.75rem 0;
+  }
+
+  .about-lead {
+    font-size: 1.15rem;
+    color: var(--color-mist-300);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Author Profile Card */
+  .author-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    margin-bottom: 3.5rem;
+    border-color: var(--border-gold);
+  }
+
+  .profile-avatar-wrap {
+    flex-shrink: 0;
+  }
+
+  .profile-avatar-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .profile-info {
+    flex-grow: 1;
+  }
+
+  .profile-name {
+    font-size: 1.6rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--color-paper-50);
+  }
+
+  .profile-alias {
+    font-size: 0.95rem;
+    color: var(--color-mist-300);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .profile-alias strong {
+    color: var(--color-gold-300);
+  }
+
+  .profile-role {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .role-tag {
+    padding: 0.2rem 0.55rem;
+    background: var(--color-ink-700);
+    color: var(--color-paper-100);
+    border-radius: var(--radius-sm);
+  }
+
+  .location-tag {
+    color: var(--color-mist-300);
+  }
+
+  .profile-bio {
+    font-size: 0.95rem;
+    color: var(--color-paper-200);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Sections */
+  .about-section {
+    margin-bottom: 2rem;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    color: var(--color-paper-50);
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(181, 154, 99, 0.2);
+    padding-bottom: 0.5rem;
+  }
+
+  .about-prose {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 1.75rem;
+    border-left: 2px solid var(--border-gold);
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .timeline-item {
+    position: relative;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    top: 5px;
+    left: -1.75rem;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-ink-900);
+    border: 2px solid var(--color-cinnabar-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .marker-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-gold-400);
+  }
+
+  .timeline-period {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-gold-400);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-title {
+    font-size: 1.2rem;
+    margin: 0.25rem 0 0.5rem 0;
+    color: var(--color-paper-50);
+  }
+
+  .timeline-desc {
+    font-size: 0.95rem;
+    color: var(--color-mist-300);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .about-footer-nav {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 3.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .author-profile-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.25rem;
+    }
+
+    .profile-role {
+      justify-content: center;
+    }
+  }
+</style>

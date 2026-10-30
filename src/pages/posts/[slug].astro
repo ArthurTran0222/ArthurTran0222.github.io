@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPublishedPosts, slugify } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts');
+  const publishedPosts = getPublishedPosts(allPosts);
+
+  return publishedPosts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const allPosts = await getCollection('posts');
+const publishedPosts = getPublishedPosts(allPosts);
+
+// Lọc các bài viết liên quan có chung tag
+const currentTags = new Set(post.data.tags.map(slugify));
+const related = publishedPosts
+  .filter((p) => p.data.slug !== post.data.slug)
+  .filter((p) => p.data.tags.some((t: string) => currentTags.has(slugify(t))))
+  .slice(0, 2);
+
+const finalRelated = related.length > 0
+  ? related
+  : publishedPosts.filter((p) => p.data.slug !== post.data.slug).slice(0, 2);
+
+const { Content } = await render(post);
+---
+
+<PostLayout post={post} relatedPosts={finalRelated}>
+  <Content />
+</PostLayout>

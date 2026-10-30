@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import { getPublishedProjects } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const allProjects = await getCollection('projects');
+  const publishedProjects = getPublishedProjects(allProjects);
+
+  return publishedProjects.map((project) => ({
+    params: { slug: project.data.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const allProjects = await getCollection('projects');
+const publishedProjects = getPublishedProjects(allProjects);
+const otherProjects = publishedProjects
+  .filter((p) => p.data.slug !== project.data.slug)
+  .slice(0, 2);
+
+const { Content } = await render(project);
+---
+
+<ProjectLayout project={project} otherProjects={otherProjects}>
+  <Content />
+</ProjectLayout>

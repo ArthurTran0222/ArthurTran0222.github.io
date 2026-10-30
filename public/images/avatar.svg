@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320">
+  <defs>
+    <radialGradient id="avatarBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e2c26"/>
+      <stop offset="70%" stop-color="#141d1a"/>
+      <stop offset="100%" stop-color="#0d1411"/>
+    </radialGradient>
+  </defs>
+  <!-- Khung tròn ngọc bích viền kim hoàng -->
+  <circle cx="160" cy="160" r="150" fill="url(#avatarBg)" stroke="#b59a63" stroke-width="3"/>
+  <circle cx="160" cy="160" r="142" fill="none" stroke="rgba(200, 211, 202, 0.15)" stroke-width="1" stroke-dasharray="4 4"/>
+  
+  <!-- Silhouette kiếm khách thanh nhã -->
+  <path d="M160,70 C145,70 135,85 135,105 C135,125 145,140 160,140 C175,140 185,125 185,105 C185,85 175,70 160,70 Z" fill="#c8d3ca"/>
+  <!-- Nón lá / tóc búi trâm cài kiếm -->
+  <path d="M120,85 Q160,50 200,85 L160,72 Z" fill="#b59a63"/>
+  <line x1="140" y1="58" x2="185" y2="78" stroke="#cfb882" stroke-width="3"/>
+
+  <!-- Thân áo trường bào kiếm hiệp -->
+  <path d="M100,260 C100,190 125,160 160,160 C195,160 220,190 220,260 Z" fill="#22322c"/>
+  <path d="M145,160 L160,210 L175,160" stroke="#b54738" stroke-width="3" fill="none"/>
+  <!-- Chuôi kiếm vắt sau lưng -->
+  <line x1="190" y1="120" x2="235" y2="75" stroke="#cfb882" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="237" cy="73" r="4" fill="#b54738"/>
+
+  <!-- Dấu triện đỏ góc dưới -->
+  <rect x="210" y="225" width="45" height="45" rx="4" fill="#b54738" stroke="#cfb882" stroke-width="1"/>
+  <text x="232" y="253" font-family="'Noto Serif', serif" font-size="20" fill="#ffffff" font-weight="bold" text-anchor="middle">義</text>
+</svg>
